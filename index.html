@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.1.2/firebase-firestore.js"></script>
+    <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyD9HZY9JRZf9Y-N8BbWbXcIhEe8A25Q610",
+        authDomain: "examen-3p-dsi.firebaseapp.com",
+        projectId: "examen-3p-dsi",
+        storageBucket: "examen-3p-dsi.appspot.com",
+        messagingSenderId: "778400281283",
+        appId: "1:778400281283:web:e993be55f1bfb06eae6876"
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    console.log(db);
+    </script>
+    <script src="./index.js"></script>
+    <script src="./functions/screens.js"></script>
+    <script src="./functions/profile.js"></script>
+    <script src="./functions/users.js"></script>
+    <script src="./functions/preGame.js"></script>
+    <script src="./functions/game.js"></script>
+    <title>Quizz time</title>
+</head>
+<body onload="loadApp()">
+
+    <!-- Titulo del juego -->
+    
+    <h1 id="quizz-time" class="center-text">Quizz time</h1>
+    <div id="nav-container">
+        <nav class="nav-screens">
+            <button class="nav-screen-item" id="first-btn" onclick="moveToHome()">Inicio</button>
+            <button class="nav-screen-item" id="second-btn" onclick="moveHowToPlay()">¿Cómo jugar?</button>
+            <button class="nav-screen-item" id="third-btn" onclick="moveClasification()">Clasificaciones</button>
+            <button class="nav-screen-item" id="last-btn" onclick="moveTeam()">Equipo</button>
+        </nav>
+    </div>
+    
+    <!-- Contenido completo de la aplicacion -->
+    
+    <!--
+        Esta screen tiene left-100% para que cuando la página cargue, se inicie el página principal y no en la página del juego. 
+        Se podría usar sin eso, pero al refrescar la página, salía casi instantaneamente que la página estaba en el juego y no
+        en la parte principal.
+    -->
+
+    <div id="content" style="position:absolute; left: -100%;">
+
+        <!-- Screen Quiz -->
+        
+        <div class="screen" id="screen-game">
+
+            <div id="actions-profile" class="aparecer">
+                <div id="buttons-profile">
+                    <button id="btn-return" onclick="backToMainScreen()">Regresar</button>
+                    <button id="btn-play" onclick="startPreGame()">Jugar</button>
+                    <button id="btn-delete-profile" onclick="deleteProf()">Eliminar perfil</button>
+                </div>
+    
+                <div>
+                    <ul style="list-style-type: none;">
+                        <li class="user-data"><b>Mejor quizz: </b><span>4</span>/5 aciertos en <span>37</span> segundos.</li>
+                        <li class="user-data"><b>Lugar en la clasificación: </b><span>1</span>°.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Screen principal -->
+
+        <div class="screen" id="screen-home">
+
+            <!-- Indicacion, Screen principal -->
+
+            <p class="indicacion">Selecciona un usuario o crea uno nuevo.</p>
+            
+            <!-- Usuarios, Screen principal -->
+
+            <div id="users">
+                <!-- <p class="user" onclick="viewProfile()">Favio</p> -->
+                <!-- <p class="user">Diego</p>
+                <p class="user">Saúl</p>
+                <p class="user">Rafael</p>
+                <p class="user">André</p> -->
+                <!-- <button id="btn-add-user" onclick="addUser()">Agregar usuario</button> -->
+            </div>
+
+            <!-- Final, Screen principal -->
+
+        </div>
+
+        <!-- Screen, Cómo se juega -->
+
+        <div class="screen" id="screen-how-to-play">
+
+            <!-- Indicacion, Cómo se juega -->
+
+            <p class="indicacion">
+                Quizz es un juego donde tienes que responder 5 preguntas de cultura general en 60 segundos. Estas
+                son las reglas del juego:
+            </p>
+
+            <!-- Reglas, Cómo se juega -->
+
+            <ul id="rules">
+                <li>
+                    Al mostrar la pregunta, en el momento en que selecciones tu respuesta, se guardará automáticamente
+                    tu respuesta.
+                </li>
+                <li>
+                    Al responder la pregunta, se mostrará si la respuesta fue correcta o incorrecta.
+                </li>
+                <li>
+                    Al finalizar las 5 preguntas, se mostrarán las posiciones de la competencia entre todos los usuarios.
+                </li>
+                <li>
+                    La puntuación mostrada en la competencia será la calificación más alta que cada usuario ha tenido.
+                </li>
+                <li>
+                    Cada usuario tiene permitido realizar un máximo de 6 quizzes.
+                </li>
+            </ul>
+
+            <!-- Final, Screen cómo se juega -->
+
+        </div>
+
+        <!-- Screen, Clasificaciones -->
+
+        <div class="screen" id="screen-clasifications">
+
+            <!-- Indicacion, Clasificaciones -->
+
+            <p class="indicacion">Primeros 3 lugares con mayor puntuación y en menor tiempo:</p>
+
+            <div id="clasification">
+                <!-- <div id="no-podio"> -->
+                    <!-- <ol start="4">
+                        <li>Rafael</li>
+                        <li>Saúl</li>
+                        <li>André</li>
+                    </ol> -->
+                <!-- </div> -->
+                <div id="podio">
+                    <div class="lugar-podio" id="second-place">
+                        <p>
+                            <span style="font-weight: 900;"><br></span>
+                             <br>
+                            
+                        </p>
+                        <img src="./src/medalla-plata.png" alt="Medalla plata" class="medalla">
+                    </div>
+                    <div class="lugar-podio" id="first-place">
+                        <p>
+                            <span style="font-weight: 900;"><br></span>
+                             <br>
+                            
+                        </p>
+                        <img src="./src/medalla-oro.png" alt="Medalla oro" class="medalla">
+                    </div>
+                    <div class="lugar-podio" id="third-place">
+                        <p>
+                            <span style="font-weight: 900;"><br></span>
+                             <br>
+                            
+                        </p>
+                        <img src="./src/medalla-bronce.png" alt="Medalla bronce" class="medalla">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="screen" id="screen-team">
+            <p><span style="font-weight: 600;">Nombre de la materia: </span>Desarrollo de sistemas en internet</p>
+            <p><span style="font-weight: 600;">Grupo: </span>34</p>
+            <p><span style="font-weight: 600;">Semestre: </span>4</p>
+            <p><span style="font-weight: 600;">Integrantes: </span></p>
+            <ul style="list-style: none;">
+                <li><span style="font-weight: 600;">307024. </span>Diego Martínez García</li>
+                <li><span style="font-weight: 600;">281971. </span>Favio Jardínez Montiel</li>
+                <li><span style="font-weight: 600;">307090. </span>José Ángel Pérez Peña</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
